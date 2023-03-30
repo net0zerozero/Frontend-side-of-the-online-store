@@ -1,26 +1,18 @@
 [
     {
         "id": 1,
-        "title": "Iphone"
+        "title": "Phones"
     },
     {
         "id": 2,
-        "title": "Ipad"
+        "title": "Macs"
     },
     {
         "id": 3,
-        "title": "Macbook"
+        "title": "Ipads"
     },
     {
-        "id": 4,
-        "title": "Apple Watch"
-    },
-    {
-        "id": 5,
+        "id": 3,
         "title": "Apple TV"
-    },
-    {
-        "id": 6,
-        "title": "Apple Accessories"
     }
 ]
