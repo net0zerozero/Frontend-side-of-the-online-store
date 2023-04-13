@@ -1,18 +1,16 @@
 [
     {
         "id": 1,
-        "title": "Phones"
+        "title": "Laptops"
     },
+
     {
         "id": 2,
-        "title": "Macs"
+        "title": "Phones"
     },
+
     {
         "id": 3,
-        "title": "Ipads"
-    },
-    {
-        "id": 3,
-        "title": "Apple TV"
+        "title": "Refrigerator"
     }
 ]

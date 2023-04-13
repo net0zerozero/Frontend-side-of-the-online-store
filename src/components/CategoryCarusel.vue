@@ -19,7 +19,7 @@ const categories = [
       <div
         v-for="c in categories"
         :key="c.id"
-        :class="{ 'carousel-item': true, active: c.id == 1 ? true : false }"
+        :class="{ 'carousel-item': true, active: c.id === 1 }"
       >
         <img :src="c.img" class="d-block w-100" alt="..." />
       </div>
