@@ -1,3 +1,10 @@
+<script setup>
+  const logout = () => {
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+  }
+</script>
+
 <template>
   <header class="p-3 text-bg-dark">
     <div class="container">
@@ -69,6 +76,9 @@
             </div>
           </li>
           <li><RouterLink to="/cart" class="nav-link px-2 text-white">Cart</RouterLink></li>
+          <li><RouterLink to="/wishlist" class="nav-link px-2 text-white">Wishlist</RouterLink></li>
+          <li><RouterLink to="/login" class="nav-link px-2 text-white">Login</RouterLink></li>
+          <li><button class="btn btn-primary" @click="logout">logout</button></li>
         </ul>
       </div>
     </div>

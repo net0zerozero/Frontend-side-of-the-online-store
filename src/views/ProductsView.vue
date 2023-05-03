@@ -23,6 +23,19 @@ const fetchProducts = async () => {
         : Math.floor(product_req.data.count / 10) + 1
     isLoaded.value = true
 }
+const addToWishlist = async (product) => {
+  await axios.post(
+    'http://localhost:8000/api/wishlist/',
+    {
+      product_id: product.id
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      }
+    }
+  )
+}
 
 watch(route, async () => {
     isLoaded.value = false
@@ -74,14 +87,14 @@ onMounted(async () => {
               </RouterLink>
                 <div class="card-body">
                   <h5 class="card-title">{{ product.title }}</h5>
-                  <p class="card-text">{{ product.price }}</p>
+                  <p class="card-text">{{ product.price }} тг</p>
                   <button class="btn-button" @click="cartMethods.addToCart(product)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                       <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                     </svg>
                     Add to cart
                   </button>
-                  
+                  <button class="btn btn-warning" @click="addToWishlist(product)">Add to wishlist</button>
 
                 </div>
             </div>
@@ -135,6 +148,7 @@ onMounted(async () => {
       font-family: "Anton", sans-serif;
       box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
       transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
   }
   
   .card-style1:hover {
@@ -156,6 +170,7 @@ onMounted(async () => {
       margin-top: 25px;
       font-size: 25px;
       color: black;
+      font-weight: bold;
   }
   
   .card-img-top{
@@ -176,6 +191,10 @@ onMounted(async () => {
       padding: 3px;
       font-weight: 700;
       border-style: double;
+      position: absolute;
+      text-align: center;
+      left: 15%;
+      bottom: 25px;
   }
   
   .card-style1:hover .btn-button{
