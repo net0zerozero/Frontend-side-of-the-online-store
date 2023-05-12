@@ -18,9 +18,11 @@ const loging = async () => {
 </script>
 
 <template>
-  <div>
+  <div class="container">
+    <div>
     <input type="email" v-model="user.email" placeholder="email"/>
     <input type="password" v-model="user.password" placeholder="password"/>
     <button @click="loging">Login</button>
+  </div>
   </div>
 </template>

@@ -1,28 +1,39 @@
 <script setup>
-    import cartMethods from '../utils/cart';
-    import { ref, watch } from 'vue';
-    import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
 
-    const cart = ref([]);
+const cart = ref([])
+const isLoaded = ref(false)
 
-    const fetchCart = () => {
-        cart.value = cartMethods.getCart();
+const getCart = async () => {
+  isLoaded.value = false
+  const response = await axios.get('http://localhost:8000/api/cart/', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
     }
+  })
+  response.data.map(async (product) => {
+    const { data } = await axios.get('http://localhost:8000/api/products/' + product)
+    cart.value.push(data)
+  })
+  console.log(cart.value);
+  isLoaded.value = true
+}
 
-    const removeItem = (id) => {
-        cartMethods.removeFromCartById(id);
-        cart.value = cartMethods.getCart();
+const removeFromCart = async (productId) => {
+  await axios.delete(`http://localhost:8000/api/cart/${productId}/`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
     }
+  })
+  cart.value = cart.value.filter(product => product.id !== productId)
+}
 
-    const clearCart = () => {
-        cartMethods.clearCart();
-        cart.value = cartMethods.getCart();
-    }
-
-    onMounted(async () => {
-        fetchCart();
-    })
+onMounted(async () => {
+  await getCart()
+})
 </script>
+
 
 <template>
     <div>
@@ -37,11 +48,11 @@
         
             
        <div class="card-item1">
-        <div v-for="item in cart" style="width: 17%" :key="item.id" class="cart-item2">
-          <img :src="item.image" class="card-img-top" :alt="item.title" />
-          <h5 class="card-title">{{ item.title }}</h5>
-          <p class="card-text">{{ item.price }} тг</p>
-          <button class="btn-button" @click="removeItem(item.id)">
+        <div v-for="product in cart" :key="product.id" class="cart-item2">
+          <img :src="product.image" class="card-img-top" :alt="product.title" />
+          <h5 class="card-title">{{ product.title }}</h5>
+          <p class="card-text">{{ product.price }} тг</p>
+          <button class="btn-button" @click="removeFromCart(product.id)">
             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
               <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
               <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -54,17 +65,7 @@
           <h3>Cart is empty</h3>
         </div>
   
-        <div v-if="cart.length > 0" class="content-div">
-          <h3 class="h3-tag">Total: {{ cartMethods.getCartTotal() }} тг</h3>
-        </div>
-        <div class="content-div">
-          <button @click="clearCart()" class="remove-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-            </svg>
-            Clear cart</button>
-        </div>
+        
 
       </div>
         </div>
@@ -199,4 +200,4 @@ h1 {
     background-color: white;
     color: black;
   }
-</style>
+</style> 

@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue'
 import {useRoute} from 'vue-router'
-import cartMethods from '../utils/cart'
+
 import axios from 'axios'
 
 const isLoaded = ref(false)
@@ -36,6 +36,20 @@ const addToWishlist = async (product) => {
     }
   )
 }
+const addToCart = async (product) => {
+  await axios.post(
+    'http://localhost:8000/api/cart/',
+    {
+      product_id: product.id
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      }
+    }
+  )
+}
+
 
 watch(route, async () => {
     isLoaded.value = false
@@ -88,13 +102,13 @@ onMounted(async () => {
                 <div class="card-body">
                   <h5 class="card-title">{{ product.title }}</h5>
                   <p class="card-text">{{ product.price }} тг</p>
-                  <button class="btn-button" @click="cartMethods.addToCart(product)">
+                  <button class="btn-button" @click="addToCart(product)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                       <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                     </svg>
                     Add to cart
                   </button>
-                  <button class="btn btn-warning" @click="addToWishlist(product)">Add to wishlist</button>
+                  <button class="btn-button2" @click="addToWishlist(product)">Add to wishlist</button>
 
                 </div>
             </div>
@@ -194,7 +208,7 @@ onMounted(async () => {
       position: absolute;
       text-align: center;
       left: 15%;
-      bottom: 25px;
+      bottom: 45px;
   }
   
   .card-style1:hover .btn-button{
@@ -210,6 +224,27 @@ onMounted(async () => {
       .card-style1 {
           max-width: 100%;
       }
+  }
+
+
+  .btn-button2{
+    height: 35px;
+      width: 70%;
+      border-radius: 15px;
+      color: white;
+      background-color: black;
+      padding: 3px;
+      font-weight: 700;
+      border-style: double;
+      position: absolute;
+      text-align: center;
+      left: 15%;
+      bottom: 5px;
+
+  }
+  .card-style1:hover .btn-button2{
+      color: black;
+      background-color: white;
   }
   </style>
   
