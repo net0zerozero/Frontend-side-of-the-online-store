@@ -1,9 +1,16 @@
 <script setup>
-  const logout = () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-  }
+import { useUserStore } from '../store.js';
+import { useRouter } from 'vue-router';
+
+const userStore = useUserStore();
+const router = useRouter();
+
+const logout = () => {
+  userStore.logout();
+  router.push('/'); // Перенаправление на главную страницу после выхода
+};
 </script>
+
 
 <template>
   <header class="p-3 text-bg-dark">
@@ -75,13 +82,18 @@
               </ul>
             </div>
           </li>
-          <li><RouterLink to="/cart" class="nav-link px-2 text-white">Cart</RouterLink></li>
-          <li><RouterLink to="/wishlist" class="nav-link px-2 text-white">Wishlist</RouterLink></li>
-          <li><RouterLink to="/login" class="nav-link px-2 text-white">Login</RouterLink></li>
-          <li><button class="btn btn-primary" @click="logout">logout</button></li>
+          <li v-if="userStore.isLoggedIn"><RouterLink to="/cart" class="nav-link px-2 text-white">Cart</RouterLink></li>
+          <li v-if="userStore.isLoggedIn"><RouterLink to="/wishlist" class="nav-link px-2 text-white">Wishlist</RouterLink></li>
+          <li v-if="userStore.isLoggedIn" class="nav-link px-2 text-white">|{{ userStore.user.name }}|</li>
+          <li v-if="userStore.isLoggedIn">
+            <button class="btn btn-primary" @click="logout">Logout</button>
+          </li>
+          <li v-if="!userStore.isLoggedIn"><RouterLink to="/login" class="nav-link px-2 text-white">Login</RouterLink></li>
+          <li v-if="!userStore.isLoggedIn"><RouterLink to="/register" class="nav-link px-2 text-white">Register</RouterLink></li>
+          
         </ul>
       </div>
     </div>
   </header>
 </template>
-<script setup></script>
+

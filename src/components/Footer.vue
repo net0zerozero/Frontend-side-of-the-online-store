@@ -1,5 +1,6 @@
 <template>
-  <div class="bg-dark">
+  <div class="footer-wrapper">
+    <div class="bg-dark">
     <div class="container text-bg-dark">
       <footer class="py-5">
         <div class="row">
@@ -83,5 +84,6 @@
         </div>
       </footer>
     </div>
+  </div>
   </div>
 </template>

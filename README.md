@@ -1,4 +1,5 @@
-# v-frontend
+# Frontend side of the online store 
+Backend side online store - [Backend](https://github.com/net0zerozero/backend-side-online-store)
 
 This template should help get you started developing with Vue 3 in Vite.
 
